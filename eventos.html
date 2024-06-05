@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Eventos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h1 class="title-center">Portal de Gestão Educacional</h1>
+    </div>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Gerenciar Agenda de Eventos/Aulas</h1>
+        <div class="mb-4">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#createEventModal">Criar Novo Evento</button>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evento in eventos %}
+                <tr>
+                    <td>{{ evento[0] }}</td>
+                    <td>{{ evento[1] }}</td>
+                    <td>{{ evento[2] }}</td>
+                    <td>{{ evento[3] }}</td>
+                    <td>
+                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#updateEventModal{{ evento[0] }}">Editar</button>
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteEventModal{{ evento[0] }}">Deletar</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createEventModalLabel">Criar Novo Evento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/eventos/criar" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="data">Data</label>
+                            <input type="datetime-local" class="form-control" id="data" name="data" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo">Tipo</label>
+                            <select class="form-control" id="tipo" name="tipo" required>
+                                <option value="aula">Aula</option>
+                                <option value="evento">Evento</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Criar Evento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% for evento in eventos %}
+    <div class="modal fade" id="updateEventModal{{ evento[0] }}" tabindex="-1" aria-labelledby="updateEventModalLabel{{ evento[0] }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateEventModalLabel{{ evento[0] }}">Atualizar Evento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/eventos/atualizar/{{ evento[0] }}" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="data">Data</label>
+                            <input type="datetime-local" class="form-control" id="data" name="data" value="{{ evento[1] }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ evento[2] }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo">Tipo</label>
+                            <select class="form-control" id="tipo" name="tipo" required>
+                                <option value="aula" {% if evento[3] == 'aula' %}selected{% endif %}>Aula</option>
+                                <option value="evento" {% if evento[3] == 'evento' %}selected{% endif %}>Evento</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Atualizar Evento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for evento in eventos %}
+    <div class="modal fade" id="deleteEventModal{{ evento[0] }}" tabindex="-1" aria-labelledby="deleteEventModalLabel{{ evento[0] }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteEventModalLabel{{ evento[0] }}">Deletar Evento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/eventos/deletar/{{ evento[0] }}" method="post">
+                    <div class="modal-body">
+                        <p>Tem certeza de que deseja deletar o evento <strong>{{ evento[2] }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-danger">Deletar Evento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

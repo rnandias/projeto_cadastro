@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+.navbar {
+
+    background-color: #FF0000;
+    padding: 20px;
+}
+
+.navbar {
+    color: #fff;
+    margin: 0;
+    text-align: center;
+}
+
+.table {
+    background-color: #6699cc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.btn-primary {
+    background-color: #FF0000;
+    border-color: #6699cc;
+}
+
+.btn-secondary {
+    background-color: #FF0000;
+    border-color: #6699cc;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}

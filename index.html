@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Gestão Educacional</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h1 class="title-center">Portal de Gestão Educacional</h1>
+    </div>
+    <div class="container mt-5 text-center">
+        <a href="{{ url_for('cursos_page') }}" class="btn btn-primary btn-lg">Gerenciar Disciplinas ou Cursos</a>
+        <a href="{{ url_for('eventos_page') }}" class="btn btn-secondary btn-lg">Gerenciar Agenda de Eventos/Aulas</a>
+    </div>
+</body>
+</html>

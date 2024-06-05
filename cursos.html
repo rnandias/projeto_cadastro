@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Disciplinas ou Cursos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <h1 class="title-center">Portal de Gestão Educacional</h1>
+    </div>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Gerenciar Disciplinas ou Cursos</h1>
+        <div class="mb-4">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#createCourseModal">Criar Novo Curso</button>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Descrição</th>
+                    <th>Carga Horária</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for curso in cursos %}
+                <tr>
+                    <td>{{ curso[0] }}</td>
+                    <td>{{ curso[1] }}</td>
+                    <td>{{ curso[2] }}</td>
+                    <td>{{ curso[3] }}</td>
+                    <td>
+                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#updateCourseModal{{ curso[0] }}">Editar</button>
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCourseModal{{ curso[0] }}">Deletar</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="createCourseModal" tabindex="-1" aria-labelledby="createCourseModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCourseModalLabel">Criar Novo Curso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/cursos/criar" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="titulo">Título</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="carga_horaria">Carga Horária</label>
+                            <input type="number" class="form-control" id="carga_horaria" name="carga_horaria" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Criar Curso</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% for curso in cursos %}
+    <div class="modal fade" id="updateCourseModal{{ curso[0] }}" tabindex="-1" aria-labelledby="updateCourseModalLabel{{ curso[0] }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateCourseModalLabel{{ curso[0] }}">Atualizar Curso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/cursos/atualizar/{{ curso[0] }}" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="titulo">Título</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" value="{{ curso[1] }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ curso[2] }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="carga_horaria">Carga Horária</label>
+                            <input type="number" class="form-control" id="carga_horaria" name="carga_horaria" value="{{ curso[3] }}" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Atualizar Curso</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for curso in cursos %}
+    <div class="modal fade" id="deleteCourseModal{{ curso[0] }}" tabindex="-1" aria-labelledby="deleteCourseModalLabel{{ curso[0] }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteCourseModalLabel{{ curso[0] }}">Deletar Curso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/cursos/deletar/{{ curso[0] }}" method="post">
+                    <div class="modal-body">
+                        <p>Tem certeza de que deseja deletar o curso <strong>{{ curso[1] }}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-danger">Deletar Curso</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
